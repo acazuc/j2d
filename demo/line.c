@@ -7,13 +7,22 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+static void do_print(const char *fmt, ...)
+{
+	va_list va_args;
+	va_begin(va_args, fmt);
+	vprintf(fmt, va_args);
+	fflush(stdout);
+	va_end(va_args);
+}
+
 int main()
 {
-	gfx_error_callback = printf;
+	gfx_error_callback = do_print;
 
 	gfx_window_properties_t properties;
 	gfx_window_properties_init(&properties);
-	properties.device_backend = GFX_DEVICE_GL4;
+	properties.device_backend = GFX_DEVICE_VK;
 	properties.window_backend = GFX_WINDOW_X11;
 	gfx_window_t *window = gfx_create_window("demo", 640, 480, &properties);
 	if (!window)
